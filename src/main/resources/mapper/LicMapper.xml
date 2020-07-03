@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwp.website.dao.LicDao">
+    <resultMap id="BaseResultMap" type="com.lwp.website.entity.Vo.LicVo">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="unit_name" jdbcType="VARCHAR" property="unitName"/>
+        <result column="lic_code" jdbcType="VARCHAR" property="licCode"/>
+        <result column="is_mac" jdbcType="VARCHAR" property="isMac"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="ex" jdbcType="TIMESTAMP" property="ex"/>
+        <result column="concurrent" jdbcType="VARCHAR" property="concurrent"/>
+        <result column="license" jdbcType="VARCHAR" property="license"/>
+        <result column="is_delete" jdbcType="VARCHAR" property="isDelete"/>
+        <result column="ORA" jdbcType="TIMESTAMP" property="ORA"/>
+    </resultMap>
+
+    <insert id="insertLic" parameterType="com.lwp.website.entity.Vo.LicVo">
+        insert into lic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="unitName!=null">
+                unit_name,
+            </if>
+            <if test="licCode!=null">
+                lic_code,
+            </if>
+            <if test="isMac!=null">
+                is_mac,
+            </if>
+            <if test="mac!=null">
+                mac,
+            </if>
+            <if test="ex!=null">
+                ex,
+            </if>
+            <if test="concurrent!=null">
+                concurrent,
+            </if>
+            <if test="license!=null">
+                license,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+            <if test="ORA != null">
+                ORA,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="unitName!=null">
+                #{unitName,jdbcType=VARCHAR},
+            </if>
+            <if test="licCode!=null">
+                #{licCode,jdbcType=VARCHAR},
+            </if>
+            <if test="isMac!=null">
+                #{isMac,jdbcType=VARCHAR},
+            </if>
+            <if test="mac!=null">
+                #{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="ex!=null">
+                #{ex,jdbcType=TIMESTAMP},
+            </if>
+            <if test="concurrent!=null">
+                #{concurrent,jdbcType=VARCHAR},
+            </if>
+            <if test="license!=null">
+                #{license,jdbcType=VARCHAR},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=VARCHAR},
+            </if>
+            <if test="ORA != null">
+                #{ORA,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertLicense" parameterType="java.lang.String">
+        update lic set license = #{license,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
+    </insert>
+
+    <select id="selectListLic" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select * from lic where (is_delete is null or is_delete = '0')
+            <if test="_parameter.containsKey('logMin')">
+                and ORA &gt;= #{logMin,jdbcType=VARCHAR}
+            </if>
+            <if test="_parameter.containsKey('logMax')">
+                and ORA &lt;= #{logMax,jdbcType=VARCHAR}
+            </if>
+            <if test="_parameter.containsKey('unitName')">
+                and unit_name like CONCAT('%',#{unitName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="_parameter.containsKey('code')">
+                and lic_code like CONCAT('%',#{code,jdbcType=VARCHAR},'%')
+            </if>
+        order by ORA desc
+    </select>
+
+    <select id="selectLicById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from lic where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="deleteLicByIds" parameterType="java.util.Map">
+        update lic set is_delete = '1' where id in 
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+</mapper>

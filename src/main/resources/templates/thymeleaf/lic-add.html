@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='授权信息管理',active='lic'">
+<header th:replace="/header::headerFragment(${title},${active})"></header>
+<head>
+	<style type="text/css">
+		.form-label{
+			text-align:right!important;
+		}
+	</style>
+</head>
+<body>
+<div class="page-container">
+	<form class="form form-horizontal" id="form-lic-add" autocomplete="off">
+		<input hidden="hidden" id="id" name="id"/>
+		<div class="row cl">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>用户名称：</label>
+			<div class="formControls col-xs-4 col-sm-3">
+				<input type="text" class="input-text" placeholder="" id="unitName" name="unitName" autocomplete="off"/>
+			</div>
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>授权编码：</label>
+			<div class="formControls col-xs-4 col-sm-3">
+				<input disabled="disabled" type="text" class="input-text" placeholder="" id="licCode" name="licCode" th:value="${licCode}" autocomplete="off" />
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>并发数：</label>
+			<div class="formControls col-xs-4 col-sm-3">
+				<input type="text" class="input-text" placeholder="" id="concurrent" name="concurrent" autocomplete="off"/>
+			</div>
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>到期时间:</label>
+			<div class="formControls col-xs-4 col-sm-3">
+				<input type="text"  onfocus="WdatePicker({ minDate:'#F{\'%y-%M-%d\'}' })" class="input-text Wdate" placeholder="" id="ex" name="ex"autocomplete="off"/>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>是否校验mac：</label>
+			<div class="formControls col-xs-4 col-sm-3">
+				<span class="select-box">
+				<select class="select" id="isMac" name="isMac" >
+					<option selected="selected" value="0">否</option>
+					<option value="1">是</option>
+				</select>
+				</span>
+			</div>
+			<div hidden="hidden" id="customize">
+				<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>mac地址:</label>
+				<div class="formControls col-xs-4 col-sm-3">
+					<input type="text" class="input-text" placeholder="" id="mac" name="mac">
+				</div>
+			</div>
+		</div>
+		<div class="row cl" style="padding-top: 15%">
+			<div class="col-xs-6 col-sm-6 col-xs-offset-4 col-sm-offset-4">
+				<button onClick="lic_save_submit();" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="quxiao()" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div th:replace="/footer::footer-content"></div>
+<div th:replace="/footer::footer_lic-add"></div>
+</body>
+</html>

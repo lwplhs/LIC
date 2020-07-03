@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lwp.website.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.lwp.website.entity.Vo.UserVo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl" />
+        <result column="screen_name" jdbcType="VARCHAR" property="screenName" />
+        <result column="created" jdbcType="INTEGER" property="created" />
+        <result column="activated" jdbcType="INTEGER" property="activated" />
+        <result column="logged" jdbcType="INTEGER" property="logged" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    </resultMap>
+    <cache eviction="LRU" flushInterval="10800000"  size="512" readOnly="true"/>
+    <select id="selectByUser" parameterType="com.lwp.website.entity.Vo.UserVo" resultMap="BaseResultMap">
+        select * from user where username = #{username,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updatePwd">
+        update user set password = #{pwd,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>
