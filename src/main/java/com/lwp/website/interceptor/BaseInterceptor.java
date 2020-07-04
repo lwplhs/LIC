@@ -48,19 +48,18 @@ public class BaseInterceptor implements HandlerInterceptor {
             response.sendRedirect(request.getContextPath() +"/getPage/404.html");
         }
         request.getSession();
+        UserVo user = TaleUtils.getLoginUser(request);
         if(!uri.startsWith(contextPath +"/login")){
-            UserVo user = TaleUtils.getLoginUser(request);
+
+            if(StringUtil.isNotNull(user)){
+                UserRedisUtil.insertOrUpdateUserSession(request,user);
+            }
+
             if (null == user) {
                 String uid = TaleUtils.getCookieUid(request);
                 if (null != uid) {
                     user = userService.queryUserById(uid);
-                    String defaultCookie = sysConfig.getDefaultCookie();
-                    String loginUserKey = sysConfig.getLoginUser();
-                    Cookie cookie = TaleUtils.cookieRaw(defaultCookie, request);
-                    if(null != cookie) {
-                        String cookieValue = cookie.getValue();
-                        redisUtil.set(loginUserKey + cookieValue, user, 60 * 30);
-                    }
+                    UserRedisUtil.insertOrUpdateUserSession(request,user);
                 }
             }
             if (null == user) {
@@ -73,23 +72,16 @@ public class BaseInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
-        if(uri.startsWith("/login")){
-            UserVo user = TaleUtils.getLoginUser(request);
+        if(uri.startsWith(contextPath +"/login")){
             if (null == user) {
                 String uid = TaleUtils.getCookieUid(request);
                 if (null != uid) {
                     user = userService.queryUserById(uid);
-                    String defaultCookie = sysConfig.getDefaultCookie();
-                    String loginUserKey = sysConfig.getLoginUser();
-                    Cookie cookie = TaleUtils.cookieRaw(defaultCookie, request);
-                    if(null != cookie) {
-                        String cookieValue = cookie.getValue();
-                        redisUtil.set(loginUserKey + cookieValue, user, 60 * 30);
-                    }
+                    UserRedisUtil.insertOrUpdateUserSession(request,user);
                 }
             }
             if (null != user) {
-                //response.sendRedirect(request.getContextPath() +"/admin/login");
+                UserRedisUtil.insertOrUpdateUserSession(request,user);
                 String url = request.getContextPath() + "/index";
                 response.setCharacterEncoding("utf-8");
                 response.setContentType("text/html; charset=utf-8");

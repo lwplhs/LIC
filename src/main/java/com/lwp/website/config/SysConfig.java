@@ -32,6 +32,8 @@ public class SysConfig {
 
     private String licensePath;
 
+    private String userSession;
+
     public String getDefaultCookie() {
         return defaultCookie;
     }
@@ -95,5 +97,13 @@ public class SysConfig {
 
     public void setLicensePath(String licensePath) {
         this.licensePath = licensePath;
+    }
+
+    public String getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(String userSession) {
+        this.userSession = userSession;
     }
 }
