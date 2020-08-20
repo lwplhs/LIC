@@ -26,4 +26,6 @@ public interface LicService {
 
     void downloadLicense(HttpServletResponse response,String id) throws IOException;
 
+    String getTotal(Map map);
+
 }

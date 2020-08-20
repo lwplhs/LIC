@@ -103,6 +103,22 @@
         order by ORA desc
     </select>
 
+    <select id="getTotalLic" resultType="java.lang.String" parameterType="java.util.Map">
+        select count(*) from lic where (is_delete is null or is_delete = '0')
+            <if test="_parameter.containsKey('logMin')">
+                and ORA &gt;= #{logMin,jdbcType=VARCHAR}
+            </if>
+            <if test="_parameter.containsKey('logMax')">
+                and ORA &lt;= #{logMax,jdbcType=VARCHAR}
+            </if>
+            <if test="_parameter.containsKey('unitName')">
+                and unit_name like CONCAT('%',#{unitName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="_parameter.containsKey('code')">
+                and lic_code like CONCAT('%',#{code,jdbcType=VARCHAR},'%')
+            </if>
+    </select>
+
     <select id="selectLicById" parameterType="java.lang.String" resultMap="BaseResultMap">
         select * from lic where id = #{id,jdbcType=VARCHAR}
     </select>

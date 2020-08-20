@@ -44,6 +44,12 @@ public class LicServiceImpl implements LicService {
     }
 
     @Override
+    public String getTotal(Map map) {
+        String num  = licDao.getTotalLic(map);
+        return num;
+    }
+
+    @Override
     public Map insertLic(LicVo licVo) {
         Map<String,String> map = new HashMap();
         map = validLicVo(licVo,map);

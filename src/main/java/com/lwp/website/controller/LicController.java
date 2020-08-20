@@ -51,18 +51,35 @@ public class LicController extends BaseController{
     }
 
     @RequestMapping(value = "/lic-list")
-    public String toLicList(Model model,
-                            @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
-                            @RequestParam(value = "limit",defaultValue = "10") int limit){
-        Page<LicVo> page = PageHelper.startPage(pageNum,limit);
-        Map map = new HashMap();
-        List<LicVo> list = licService.listLic(map);
-
-        model.addAttribute("total",page.getTotal());
-        model.addAttribute("lics",list);
+    public String toLicList(){
 
         return this.render("/lic-list");
 
+    }
+
+    @RequestMapping(value = "/getTotal")
+    @ResponseBody
+    public String getTotal(@RequestParam(value = "logMin",defaultValue = "") String logMin,
+                           @RequestParam(value = "logMax",defaultValue = "") String logMax,
+                           @RequestParam(value = "unitName",defaultValue = "") String unitName,
+                           @RequestParam(value = "code",defaultValue = "" ) String code){
+
+        Map map = new HashMap();
+        if(StringUtil.isNotNull(logMin)) {
+            map.put("logMin", logMin);
+        }
+        if(StringUtil.isNotNull(logMax)) {
+            map.put("logMax", logMax);
+        }
+        if(StringUtil.isNotNull(unitName)) {
+            map.put("unitName", unitName);
+        }
+        if(StringUtil.isNotNull(code)) {
+            map.put("code", code);
+        }
+        String num = licService.getTotal(map);
+
+        return num;
     }
 
     @RequestMapping(value = "/list")

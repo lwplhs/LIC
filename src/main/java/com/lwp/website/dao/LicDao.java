@@ -44,4 +44,11 @@ public interface LicDao {
 
     int deleteLicByIds(Map<String,Object> map);
 
+
+    /**
+     * 获取总数
+     */
+
+    String getTotalLic(Map map);
+
 }

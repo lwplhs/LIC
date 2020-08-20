@@ -47,6 +47,9 @@ public class BaseInterceptor implements HandlerInterceptor {
         if(uri.startsWith(contextPath+"/404")){
             response.sendRedirect(request.getContextPath() +"/getPage/404.html");
         }
+        if(uri.startsWith(contextPath+"/fe")){
+            return true;
+        }
         request.getSession();
         UserVo user = TaleUtils.getLoginUser(request);
         if(!uri.startsWith(contextPath +"/login")){
