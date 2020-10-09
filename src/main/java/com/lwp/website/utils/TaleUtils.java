@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -52,9 +54,10 @@ public class TaleUtils {
 
     /**
      * 返回当前登录用户
-     *
+     *  现不使用了 使用Shiro进行管理
      * @return
      */
+    @Deprecated
     public static UserVo getLoginUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
         UserVo userVo = null;
@@ -69,6 +72,13 @@ public class TaleUtils {
         return userVo;
     }
 
+    /**
+     * 根据request获取redis中的值
+     * 现不使用了 使用Shiro进行管理
+     * @param request
+     * @return
+     */
+    @Deprecated
     public static UserVo getLoginUserByRedis(HttpServletRequest request){
         String defaultCookie = sysConfig.getDefaultCookie();
         String loginUserKey = sysConfig.getLoginUser();
@@ -126,7 +136,9 @@ public class TaleUtils {
      *
      * @param source 数据源
      * @return 加密字符串
+     * 不推荐使用 请使用 Shiro进行MD5加密
      */
+    @Deprecated
     public static String MD5encode(String source) {
         if (StringUtils.isBlank(source)) {
             return null;
@@ -225,6 +237,18 @@ public class TaleUtils {
         url = url + temp;
         path = path + url;
         return path;
+    }
+
+    public static String getProjectPath() {
+        String filePath = "";
+        try {
+            filePath = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
+        } catch (FileNotFoundException e) {
+            filePath = System.getProperty("user.dir");
+            e.printStackTrace();
+        }
+
+        return filePath;
     }
 
     /**

@@ -38,7 +38,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o)throws Exception{
-        String uri = request.getRequestURI();
+        /*String uri = request.getRequestURI();
         LOGGER.info("UserAgent:{}",request.getHeader(USER_AGENT));
         LOGGER.info("用户访问地址：{}，来路地址：{}",uri, IPKit.getIpAddrByRequest(request));
         String contextPath = request.getContextPath();
@@ -92,7 +92,7 @@ public class BaseInterceptor implements HandlerInterceptor {
                 this.toLogin(out, url);
                 return false;
             }
-        }
+        }*/
         return true;
 
 

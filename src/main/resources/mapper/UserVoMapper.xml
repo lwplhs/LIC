@@ -22,4 +22,8 @@
         update user set password = #{pwd,jdbcType=VARCHAR} where id = #{id,jdbcType=VARCHAR}
     </update>
 
+    <select id="selectUserByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from user where username = #{userName,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

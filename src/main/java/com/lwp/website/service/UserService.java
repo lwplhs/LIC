@@ -28,6 +28,13 @@ public interface UserService {
     UserVo queryUserById(String uid);
 
     /**
+     * 根据用户名查找User
+     * @param userName
+     * @return
+     */
+    UserVo queryUserNyUserName(String userName);
+
+    /**
      * 用户登录
      * @param username
      * @param password

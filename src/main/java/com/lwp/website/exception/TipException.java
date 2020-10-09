@@ -1,4 +1,4 @@
-package com.lwp.website.utils;
+package com.lwp.website.exception;
 
 public class TipException extends RuntimeException{
     public TipException() {

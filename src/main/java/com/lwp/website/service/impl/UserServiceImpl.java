@@ -5,7 +5,7 @@ import com.lwp.website.entity.Vo.UserVo;
 import com.lwp.website.service.UserService;
 import com.lwp.website.utils.StringUtil;
 import com.lwp.website.utils.TaleUtils;
-import com.lwp.website.utils.TipException;
+import com.lwp.website.exception.TipException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +42,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserVo queryUserNyUserName(String userName) {
+        UserVo userVo = userDao.selectUserByName(userName);
+        return userVo;
+    }
+
+    /**
+     * 登录校验，现使用Shiro进行管理 放弃使用
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    @Deprecated
     public UserVo login(String username, String password) {
         if(StringUtils.isBlank(username) || StringUtils.isBlank(password)){
             throw new TipException("用户名和密码不能为空");

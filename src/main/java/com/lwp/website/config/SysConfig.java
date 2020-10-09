@@ -2,6 +2,7 @@ package com.lwp.website.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "website")
 @PropertySource(value = "config.properties")
+@Order(value=1)
 public class SysConfig {
 
     private String defaultCookie;
@@ -33,6 +35,16 @@ public class SysConfig {
     private String licensePath;
 
     private String userSession;
+
+    private int shiroRedisSaveTime;
+
+    public int getShiroRedisSaveTime() {
+        return shiroRedisSaveTime;
+    }
+
+    public void setShiroRedisSaveTime(int shiroRedisSaveTime) {
+        this.shiroRedisSaveTime = shiroRedisSaveTime;
+    }
 
     public String getDefaultCookie() {
         return defaultCookie;

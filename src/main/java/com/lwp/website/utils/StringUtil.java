@@ -11,6 +11,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@Deprecated
+/**
+ * 使用hutool工具类
+ */
 public class StringUtil {
     private static Map charMap = new HashMap();
     public static Logger loger = LoggerFactory.getLogger(StringUtil.class);

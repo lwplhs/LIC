@@ -19,4 +19,7 @@ public interface UserDao {
 
     int updatePwd(String id,String pwd);
 
+
+    UserVo selectUserByName(String userName);
+
 }

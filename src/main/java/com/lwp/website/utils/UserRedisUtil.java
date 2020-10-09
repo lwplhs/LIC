@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created with IntelliJ IDEA.
- *
+ *  redis 用户管理，现在交给shiro管理
  * @Auther: liweipeng
  * @Date: 2020/07/04/17:04
  * @Description:
  */
 @Component
+@Deprecated
 public class UserRedisUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRedisUtil.class);
     private static SysConfig sysConfig;

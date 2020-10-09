@@ -1,11 +1,14 @@
 package com.lwp.website.controller;
 
-import com.lwp.website.config.SysConfig;
 import com.lwp.website.entity.Bo.RestResponseBo;
 import com.lwp.website.entity.Vo.UserVo;
+import com.lwp.website.exception.TipException;
 import com.lwp.website.service.UserService;
 import com.lwp.website.utils.*;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -46,13 +49,14 @@ public class IndexController extends BaseController{
                                   @RequestParam(value = "oldPwd") String oldPwd,
                                   @RequestParam(value = "newPwd") String newPwd,
                                   @RequestParam(value = "enPwd") String enPwd){
-        UserVo userVo = TaleUtils.getLoginUser(request);
+        UserVo userVo = (UserVo) SecurityUtils.getSubject().getPrincipal();//使用shiro进行管理//TaleUtils.getLoginUser(request);
         Map map = userService.changePwd(oldPwd,newPwd,enPwd,userVo);
         //删除成功
         if("1".equals(map.get("code"))){
             //清除登录状态
             try {
-                UserRedisUtil.delUserSession(request);
+                //UserRedisUtil.delUserSession(request);
+                SecurityUtils.getSubject().logout();
                 LOGGER.info("用户: "+userVo.getUsername()+"退出系统");
                 return RestResponseBo.ok(1,map.get("msg"));
             }catch (Exception e){
@@ -69,7 +73,7 @@ public class IndexController extends BaseController{
     public String index(Model model,
                         HttpServletRequest request,
                         HttpServletResponse response){
-        UserVo userVo = TaleUtils.getLoginUser(request);
+        UserVo userVo = (UserVo) SecurityUtils.getSubject().getPrincipal();//修改使用Shiro//TaleUtils.getLoginUser(request);
         model.addAttribute("user",userVo);
         return this.render("/index");
     }
@@ -92,7 +96,7 @@ public class IndexController extends BaseController{
                                   @RequestParam (required = false) String rememberMe,
                                   HttpServletRequest request,
                                   HttpServletResponse response){
-        Integer error_count = UserRedisUtil.getErrorCount(request);
+        /*Integer error_count = UserRedisUtil.getErrorCount(request);
         if(null != error_count && error_count >=3){
             return RestResponseBo.fail("您输入的密码已经错误超过3次，请10分钟后尝试");
         }else {
@@ -103,6 +107,10 @@ public class IndexController extends BaseController{
                     TaleUtils.setCookie(response,user.getId());
                 }
                 UserRedisUtil.insertErrorCount(request,error_count);
+                UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,username+password);
+                // 进行验证，这里可以捕获异常，然后返回对应信息
+                SecurityUtils.getSubject().login(usernamePasswordToken);
+
                 LOGGER.info("用户： "+username+"登录成功");
             }catch (Exception e){
                 error_count = null == error_count ? 1 :error_count +1;
@@ -118,7 +126,17 @@ public class IndexController extends BaseController{
                 LOGGER.error(msg,e);
                 return RestResponseBo.fail(msg);
             }
+        }*/
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username,username+password);
+        // 进行验证，这里可以捕获异常，然后返回对应信息
+        try {
+            SecurityUtils.getSubject().login(usernamePasswordToken);
+            LOGGER.info(username + "  登录成功");
+        }catch (Exception e){
+            LOGGER.info("用户名："+username+"  密码："+password+"   登录失败，");
+            throw new UnknownAccountException();
         }
+
         return RestResponseBo.ok();
     }
 
@@ -128,8 +146,8 @@ public class IndexController extends BaseController{
                                  HttpServletRequest request,
                                  HttpServletResponse response){
         try {
-            UserVo userVo = TaleUtils.getLoginUserByRedis(request);
-            UserRedisUtil.delUserSession(request);
+            UserVo userVo = (UserVo) SecurityUtils.getSubject().getPrincipal();//修改使用shiro//TaleUtils.getLoginUserByRedis(request);
+            SecurityUtils.getSubject().logout();//修改使用shiro//UserRedisUtil.delUserSession(request);
             LOGGER.info("用户: "+userVo.getUsername()+"退出系统");
             return RestResponseBo.ok();
         }catch (Exception e){

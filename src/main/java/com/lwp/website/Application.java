@@ -29,6 +29,7 @@ public class Application implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+        //cookie通过shiro来管理
         String defaultCookie = sysConfig.getDefaultCookie();
         servletContext.getSessionCookieConfig().setName(defaultCookie);
     }
