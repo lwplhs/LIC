@@ -1,4 +1,10 @@
-
+$(function () {
+    getPage();
+});
+var page = 1;
+var limit = 10;
+var total;
+var searchKey;
 
 function lic_add(title,url){
     layer.open({
@@ -21,18 +27,9 @@ function lic_add(title,url){
 
 
 
-$(function () {
-    getPage();
-});
-var page = 1;
-var limit = 10;
-var total;
 function loadData() {
 
-    var logMin = $("#logMin").val();
-    var logMax = $("#logMax").val();
-    var unitName = $("#unitName").val();
-    var code = $("#code").val();
+    var searchKey = $("#search").val();
 
     NProgress.start();
     var url = "/lic/list";
@@ -42,14 +39,24 @@ function loadData() {
         data:{
             "pageNum":page,
             "limit":limit,
-            "logMin":logMin,
-            "logMax":logMax,
-            "unitName":unitName,
-            "code":code,
+            "searchKey":searchKey
         },
         success: function (data) {
             $(".lic_list").html(data);
             NProgress.done();
+            setTimeout(function () {
+                /*
+                                getMenu();
+                */
+                var total = $("#total").val();
+                if(total == 0){
+                    $("#laypage").attr("hidden","hidden");
+                    $("#dataNull").removeAttr("hidden");
+                }else {
+                    $("#dataNull").attr("hidden","hidden");
+                    $("#laypage").removeAttr("hidden");
+                }
+            },100);
         }
     });
 }
@@ -173,20 +180,14 @@ function searchLic() {
 
 //获取总数
 function getTotal() {
-    var logMin = $("#logMin").val();
-    var logMax = $("#logMax").val();
-    var unitName = $("#unitName").val();
-    var code = $("#code").val();
+    var searchKey = $("#search").val();
 
     var url = "/lic/getTotal";
     $.ajax({
         url: url,
         type: 'POST',
         data:{
-            "logMin":logMin,
-            "logMax":logMax,
-            "unitName":unitName,
-            "code":code,
+            "searchKey":searchKey
         },
         success: function (data) {
             $("#total").val(data);

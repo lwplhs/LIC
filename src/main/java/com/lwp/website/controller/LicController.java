@@ -1,5 +1,6 @@
 package com.lwp.website.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -86,22 +87,12 @@ public class LicController extends BaseController{
     public String listLic(Model model,
                           @RequestParam(value = "pageNum",defaultValue = "1") int pageNum,
                           @RequestParam(value = "limit",defaultValue = "10") int limit,
-                          @RequestParam(value = "logMin",defaultValue = "") String logMin,
-                          @RequestParam(value = "logMax",defaultValue = "") String logMax,
-                          @RequestParam(value = "unitName",defaultValue = "") String unitName,
-                          @RequestParam(value = "code",defaultValue = "" ) String code){
+                          @RequestParam(value = "searchKey",defaultValue = "") String searchKey){
         Map<String,Object> map = new HashMap();
-        if(StringUtil.isNotNull(logMin)) {
-            map.put("logMin", logMin);
-        }
-        if(StringUtil.isNotNull(logMax)) {
-            map.put("logMax", logMax);
-        }
-        if(StringUtil.isNotNull(unitName)) {
-            map.put("unitName", unitName);
-        }
-        if(StringUtil.isNotNull(code)) {
-            map.put("code", code);
+        if(StrUtil.isNotEmpty(searchKey)){
+            map.put("searchKey",searchKey);
+        }else {
+            map.put("searchKey",null);
         }
         Page<LicVo> page = PageHelper.startPage(pageNum,limit);
         List<LicVo> list = licService.listLic(map);

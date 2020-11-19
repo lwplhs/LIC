@@ -88,7 +88,10 @@
 
     <select id="selectListLic" resultMap="BaseResultMap" parameterType="java.util.Map">
         select * from lic where (is_delete is null or is_delete = '0')
-            <if test="_parameter.containsKey('logMin')">
+                <if test="searchKey != null">
+                    and unit_name like CONCAT('%',#{searchKey,jdbcType=VARCHAR},'%')
+                </if>
+<!--            <if test="_parameter.containsKey('logMin')">
                 and ORA &gt;= #{logMin,jdbcType=VARCHAR}
             </if>
             <if test="_parameter.containsKey('logMax')">
@@ -99,7 +102,7 @@
             </if>
             <if test="_parameter.containsKey('code')">
                 and lic_code like CONCAT('%',#{code,jdbcType=VARCHAR},'%')
-            </if>
+            </if>-->
         order by ORA desc
     </select>
 
